@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private Sensor accelorSensor;
     private SensorEventListener accelorEventListener;
 
+    private boolean IsHolding = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,11 +70,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                 String log = String.valueOf(sensorEvent.values[0]) + " " + String.valueOf(sensorEvent.values[1])  + " " + String.valueOf(sensorEvent.values[2]);
                 Log.d("gyro", log);
+                // On table
                 if (sensorEvent.values[0] < 0.005f && sensorEvent.values[0] > -0.005f){
                     getWindow().getDecorView().setBackgroundColor(Color.GREEN);
+                    IsHolding = false;
                 }
                 else{
-                    getWindow().getDecorView().setBackgroundColor(Color.RED);
+                    IsHolding = true;
                 }
             }
 
@@ -88,6 +92,27 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
                 String log = String.valueOf(sensorEvent.values[0]) + " " + String.valueOf(sensorEvent.values[1])  + " " + String.valueOf(sensorEvent.values[2]);
                 Log.d("acceler", log);
+
+                if (IsHolding) {
+                    // Right
+                    if (sensorEvent.values[0] < -2.5f) {
+                        getWindow().getDecorView().setBackgroundColor(Color.CYAN);
+                    }
+
+                    // Left
+                    else if (sensorEvent.values[0] > 2.5f) {
+                        getWindow().getDecorView().setBackgroundColor(Color.BLUE);
+                    } else {
+                        // Sit or Stand
+                        if (sensorEvent.values[2] > 2.5f) {
+                            getWindow().getDecorView().setBackgroundColor(Color.RED);
+                        }
+                        // Back
+                        else if (sensorEvent.values[2] < -2.5f) {
+                            getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
+                        }
+                    }
+                }
             }
 
             @Override
