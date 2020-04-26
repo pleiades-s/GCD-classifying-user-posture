@@ -16,6 +16,7 @@ import android.app.PendingIntent;
 import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.ActivityRecognitionClient;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final TextView posture = (TextView)findViewById(R.id.textView);
+
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         accelorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -72,7 +75,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Log.d("gyro", log);
                 // On table
                 if (sensorEvent.values[0] < 0.005f && sensorEvent.values[0] > -0.005f){
-                    getWindow().getDecorView().setBackgroundColor(Color.GREEN);
+//                    getWindow().getDecorView().setBackgroundColor(Color.GREEN);
+                    posture.setText("On-table");
                     IsHolding = false;
                 }
                 else{
@@ -96,21 +100,27 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (IsHolding) {
                     // Right
                     if (sensorEvent.values[0] < -2.5f) {
-                        getWindow().getDecorView().setBackgroundColor(Color.CYAN);
+//                        getWindow().getDecorView().setBackgroundColor(Color.CYAN);
+                        posture.setText("Right side");
                     }
 
                     // Left
                     else if (sensorEvent.values[0] > 2.5f) {
-                        getWindow().getDecorView().setBackgroundColor(Color.BLUE);
+//                        getWindow().getDecorView().setBackgroundColor(Color.BLUE);
+                        posture.setText("Left side");
                     } else {
+
                         // Sit or Stand
                         if (sensorEvent.values[2] > 2.5f) {
-                            getWindow().getDecorView().setBackgroundColor(Color.RED);
+//                            getWindow().getDecorView().setBackgroundColor(Color.RED);
+                            posture.setText("Sit or stand");
                         }
                         // Back
                         else if (sensorEvent.values[2] < -2.5f) {
-                            getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
+//                            getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
+                            posture.setText("Back side");
                         }
+
                     }
                 }
             }
